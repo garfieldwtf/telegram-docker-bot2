@@ -1,11 +1,19 @@
 version: '3.8'
 
 services:
-  docker-monitor-bot:
-    build: .
-    container_name: docker-monitor-bot
-    env_file:
-      - .env
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+  docker-monitor:
+    image: garfieldwtf/telegram-docker2:latest
+    container_name: docker-monitor
     restart: unless-stopped
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    mem_limit: 64m
+    cpus: 0.5
+    environment:
+      - TELEGRAM_BOT_TOKEN=your_bot_token
+      - TELEGRAM_CHAT_ID=your_chat_id
+      - MONITOR_INTERVAL=5
+    tty: true
+    stdin_open: true
+    detach: true
